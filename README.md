@@ -5,7 +5,7 @@ DISCLAIMER (to the person who asked about it in the Youtube Comment Section):
 
 This was left somewhat unfinished - some objects were marked as "visible" even behind objects. There's a raycast in there that was meant to fix this - if the target couldn't be raycasted it was probably behind a wall and thus, not visible.
 
-Other than that, the code is also a bit messey since it was a work in progress (apologies). **I can't guarantee the code works as is.**
+Other than that, the code is also a bit messy since it was a work in progress (apologies). **I can't guarantee the code works as is.**
 
 WHAT YOU WILL FIND:
 
