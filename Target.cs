@@ -35,11 +35,13 @@ public class Target : MonoBehaviour
         cam = Camera.main;
         m_collider = GetComponent<Collider>();
 
-        if (targetPool == null) {
+        if (targetPool == null)
+        {
             targetPool = new List<Transform>();
         }
 
-        if (dc == null) {
+        if (dc == null)
+        {
             dc = new DistanceClass();
         }
 
@@ -73,14 +75,16 @@ public class Target : MonoBehaviour
 
                 //only remove a target if the collider is NOT another target
                 //the collider does NOT contain a Target scipt, IS NOT A TARGET SO REMOVE
-                if (!hitInfo.transform.GetComponent<Target>() && !hitInfo.collider.CompareTag("Player")) {
+                if (!hitInfo.transform.GetComponent<Target>() && !hitInfo.collider.CompareTag("Player"))
+                {
                     RemoveTarget();
                 }
 
-                
+
 
             }
-            else {
+            else
+            {
 
                 hitName = "";
                 //nothing in the way
@@ -92,12 +96,14 @@ public class Target : MonoBehaviour
             }
 
         }
-        else{
+        else
+        {
             RemoveTarget();
         }
     }
 
-    private void RemoveTarget() {
+    private void RemoveTarget()
+    {
         if (targetPool.Contains(this.transform))
         {
             targetPool.Remove(this.transform);
@@ -105,7 +111,71 @@ public class Target : MonoBehaviour
         }
     }
 
-    public class DistanceClass : IComparer <Transform> {
+    public static Transform GetDesiredTarget()
+    {
+
+        //so this is called the moment you try and focus
+        //this is where we sort and return middle index...
+        //scrolling through targets is done after this too, where the targets are sorted, but since it pulls from the same static target pool, that means targets no longer in view are not accessible...
+        //new targets entering are added to the end though, and are not sorted..
+        //so before a flick, re-sort OK
+        if (Target.targetPool != null)
+        {
+
+
+            Target.targetPool.Sort(Target.dc);
+
+            Transform nearestTarget = null;
+            float nearestDistance = 100.0f;
+            float furthestDistance = 100.0f;
+
+            foreach (Transform t in Target.targetPool)
+            {
+                //check angle between camera forward and 
+
+                //i mean, really ur looking for closest target to center, followed by closest to range and/or in range
+                Vector3 viewPortPoint = Camera.main.WorldToViewportPoint(t.position);
+
+                Vector2 viewPortLateral = new Vector2(viewPortPoint.x, viewPortPoint.y);
+
+                float viewPortDistance = viewPortPoint.z; //this is how far away they are from the frustrum
+
+                float targetViewDistance = Vector2.Distance((Vector2.one * 0.5f), viewPortLateral);
+
+                //additional logic required for when a target is closer to player but further from center...
+                //IDK YET, A DOUBLE MIN CHECK??
+                //LIKE HERE ARE two values: closest to center AND closest to player
+                //whoever is the min in both...
+                //no idk, like track the closest and if it's within a certain angle from camera than it becomes the desired target
+
+                if (targetViewDistance < nearestDistance)
+                {
+                    nearestDistance = targetViewDistance;
+                    nearestTarget = t;
+                }
+
+                //this tracks the closest target yeh? and this should supersede the above set as long as the target is within a certain range
+                //you can have a target closer but have it be not the center object so as long as the viewPortPoint is within this range, set it...
+                if (viewPortDistance < furthestDistance)
+                {
+                    furthestDistance = viewPortDistance;
+
+                    //Gonna focus on fixing the camera Lock before testing this
+                    //if (targetViewDistance < 0.1f) //this says that this object is the closest to player, but it only becomes the desired Target if it's within a certain range from the center
+                    //    nearestTarget = t;
+                }
+            }
+
+            return nearestTarget;
+
+        }
+
+        return null;
+
+    }
+
+    public class DistanceClass : IComparer<Transform>
+    {
 
         //public static Transform GetNearestToCenter(Transform x, Transform y) {
         //    Camera camCache = Camera.main; //cache camera for a bit faster processing
@@ -130,7 +200,8 @@ public class Target : MonoBehaviour
         //        return y;
         //}
 
-        public int Compare(Transform x, Transform y) {
+        public int Compare(Transform x, Transform y)
+        {
 
             Camera camCache = Camera.main; //cache camera for a bit faster processing
 
@@ -191,63 +262,6 @@ public class Target : MonoBehaviour
         }
 
     }
-
-    public static Transform GetDesiredTarget() {
-
-        //so this is called the moment you try and focus
-        //this is where we sort and return middle index...
-        //scrolling through targets is done after this too, where the targets are sorted, but since it pulls from the same static target pool, that means targets no longer in view are not accessible...
-        //new targets entering are added to the end though, and are not sorted..
-        //so before a flick, re-sort OK
-        if (Target.targetPool != null) {
-
-
-            Target.targetPool.Sort(Target.dc);
-
-            Transform nearestTarget = null;
-            float nearestDistance = 100.0f;
-            float furthestDistance = 100.0f;
-
-            foreach (Transform t in Target.targetPool)
-            {
-                //check angle between camera forward and 
-
-                //i mean, really ur looking for closest target to center, followed by closest to range and/or in range
-                Vector3 viewPortPoint = Camera.main.WorldToViewportPoint(t.position);
-
-                Vector2 viewPortLateral = new Vector2(viewPortPoint.x, viewPortPoint.y);
-
-                float viewPortDistance = viewPortPoint.z; //this is how far away they are from the frustrum
-
-                float targetViewDistance = Vector2.Distance((Vector2.one * 0.5f), viewPortLateral);
-
-                //additional logic required for when a target is closer to player but further from center...
-                //IDK YET, A DOUBLE MIN CHECK??
-                //LIKE HERE ARE two values: closest to center AND closest to player
-                //whoever is the min in both...
-                //no idk, like track the closest and if it's within a certain angle from camera than it becomes the desired target
-
-                if (targetViewDistance < nearestDistance)
-                {
-                    nearestDistance = targetViewDistance;
-                    nearestTarget = t;
-                }
-
-                //this tracks the closest target yeh? and this should supersede the above set as long as the target is within a certain range
-                //you can have a target closer but have it be not the center object so as long as the viewPortPoint is within this range, set it...
-                if (viewPortDistance < furthestDistance)
-                {
-                    furthestDistance = viewPortDistance;
-
-                    //Gonna focus on fixing the camera Lock before testing this
-                    //if (targetViewDistance < 0.1f) //this says that this object is the closest to player, but it only becomes the desired Target if it's within a certain range from the center
-                    //    nearestTarget = t;
-                }
-            }
-
-            return nearestTarget;
-
-    }
-    return null;
-
 }
+
+    
