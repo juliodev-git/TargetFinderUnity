@@ -13,4 +13,6 @@ There are two scripts, the main target.cs script and a target viewer script. The
 
 The static properties in target.cs are a list of transforms which are the targets, a custom class called DistanceClass, and a function that returns the target nearest the center of the camera view. The DistanceClass is an IComparer, but all that means is that we can use the class in conjunction with List.Sort() to sort our targets from left to right. The function uses the DistanceClass to sort the objects, then a second foreach loop checks which of the targets is closer to the camera - even if a target is in the center of the screen, the focused target will be the target closest to the camera itself.
 
+The targetviewer script just pulls from the static list of targets and shows them in the inspector. Attach that script to an empty game object and it will show you the pool of targets.
+
 Good luck sorting this out, I'm not sure if I'm going to use this technique in the future but if I do go back and refine it, I'll make sure to update the repo.
