@@ -13,3 +13,6 @@ Simply add the Target.cs script to any game object with a collider and ensure a 
 - Player FreeLook CinemachineCamera
 - Target Follow CinemachineCamera (with a Seperate LookAt Target)
 - Animator for the Arrow Icons
+
+Player Script is for simple rigidbody movement relative to camera direction.
+Target Folder contains UI animation clips for the arrow (you will have to create the Animator StateMachine - please consider watching the linked Tutorial for more help (COMING SOON).
