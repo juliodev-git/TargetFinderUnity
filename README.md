@@ -15,4 +15,6 @@ Simply add the Target.cs script to any game object with a collider and ensure a 
 - Animator for the Arrow Icons
 
 Player Script is for simple rigidbody movement relative to camera direction.
-Target Folder contains UI animation clips for the arrow (you will have to create the Animator StateMachine - please consider watching the linked Tutorial for more help (COMING SOON).
+Target Folder contains UI animation clips for the arrow (you will have to create the Animator StateMachine - please consider watching the linked Tutorial for more help.
+
+[How To Z-Target in Unity Like Ocarina of Time](https://www.youtube.com/watch?v=FfDKWj-0Uyc)
