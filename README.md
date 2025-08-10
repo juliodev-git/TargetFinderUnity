@@ -18,3 +18,5 @@ Player Script is for simple rigidbody movement relative to camera direction.
 Target Folder contains UI animation clips for the arrow (you will have to create the Animator StateMachine - please consider watching the linked Tutorial for more help.
 
 [How To Z-Target in Unity Like Ocarina of Time](https://www.youtube.com/watch?v=FfDKWj-0Uyc)
+
+Tutorial Addendum 1: Additional changes have been made to Target.cs and TargetFinder.cs to account for targets being destroyed or disabled mid-lock-on. Typically, targets are going to be destroyed during gameplay and during lock-on. The account for this, OnDestroy will now remove the target from the target pool and the TargetFinder will also check every frame if the currentTarget still exists.
