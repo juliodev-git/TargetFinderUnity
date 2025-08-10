@@ -42,4 +42,16 @@ public class Target : MonoBehaviour
             
         }
     }
+
+    //Tutorial Addendum 1 - Ensure target removes itself from target pool when target disabled or destroyed
+    private void OnDisable()
+    {
+        TargetFinder.RemoveFromPool(this.transform);
+    }
+
+    private void OnDestroy()
+    {
+        TargetFinder.RemoveFromPool(this.transform);
+    }
+    //End TA
 }

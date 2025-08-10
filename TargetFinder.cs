@@ -56,6 +56,12 @@ public class TargetFinder : MonoBehaviour
     {
         poolView = pool;
 
+        //Tutorial Addendum 1 - Add a special case for when the current locked on target has been destroyed mid-lock on
+        if (lockedOn && !currentTarget) {
+            LockOff();
+        }
+        //End TA1
+
         if (input.Player.Fire.IsPressed() && !lockedOn)
         {
             LockOn();
